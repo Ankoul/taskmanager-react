@@ -9,7 +9,8 @@ class ProjectService {
 
     createProject = async (project) => {
         project = _.clone(project);
-        project.id = _.maxBy(projects, (p) => p.id).id + 1;
+        project.id = _.add(_.max(_.map(projects, (p) => p.id)), 1);
+        project.tasks = [];
         projects.push(project);
         return project;
     };

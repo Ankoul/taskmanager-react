@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import ProjectCard from "../../component/ProjectCard";
 import CardDeck from "react-bootstrap/CardDeck";
-import AddProjectCard from "../../component/AddProjectCard";
+import CreateProjectCard from "../../component/CreateProjectCard";
 import projectService from "../../service/ProjectService";
+import {IconContext} from "react-icons";
 
 class App extends Component {
 
@@ -14,20 +15,25 @@ class App extends Component {
     }
 
     async componentDidMount() {
-        let projects = await projectService.listProjects();
-        this.setState({projects});
+        await this.loadProjects();
     }
 
-    render() {
+    loadProjects = async () => {
+        let projects = await projectService.listProjects();
+        this.setState({projects});
+    };
 
+    render() {
         return (
-            <div className="App">
-                <CardDeck>
-                    {this.state.projects.map((project)=>
-                        <ProjectCard project={project} key={project.id}/>
-                    )}
-                    <AddProjectCard/>
-                </CardDeck>
+            <div>
+                <IconContext.Provider value={{color: "blue", size: "0.8em"}}>
+                    <CardDeck>
+                        {this.state.projects.map((project) =>
+                            <ProjectCard project={project} key={project.id} onDelete={this.loadProjects}/>
+                        )}
+                        <CreateProjectCard onCreate={this.loadProjects}/>
+                    </CardDeck>
+                </IconContext.Provider>
             </div>
         );
     }
