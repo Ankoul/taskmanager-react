@@ -18,7 +18,7 @@ export default class ProjectCard extends Component {
 
     static propTypes = {
         project: PropTypes.object,
-        onDelete: PropTypes.func,
+        onChange: PropTypes.func,
     };
 
     constructor(props) {
@@ -49,7 +49,7 @@ export default class ProjectCard extends Component {
 
     onProjectDeleteHandler = async ()=>{
         await projectService.deleteProject(this.props.project.id);
-        this.props.onDelete(this.props.project);
+        this.props.onChange(this.props.project);
     };
 
     todoFilter = (task) => !task.finishDate;
@@ -65,18 +65,18 @@ export default class ProjectCard extends Component {
         if (!newTaskName) {
             return;
         }
-        await taskService.createTask({description: newTaskName}, this.props.project.id);
-        this.setState({newTaskName: ""});
+        await taskService.createTask({description: newTaskName, projectId: this.props.project.id});
+        this.setState({newTaskName: ""}, () => this.props.onChange());
     };
 
     onTaskChangeHandler = async (task) => {
-        await taskService.updateTask(task, this.props.project.id);
+        await taskService.updateTask(task);
         this.forceUpdate();
     };
 
     onTaskDeleteHandler = async (task) => {
         await taskService.deleteTask(task.id, this.props.project.id);
-        this.forceUpdate();
+        this.props.onChange();
     };
 
     render() {

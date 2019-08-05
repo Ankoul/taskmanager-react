@@ -23,3 +23,11 @@ span.input-group-text {
   background-color: transparent;
   border: 0;
 }
+
+.mt-100 {
+  margin-top: 100px;
+}
+.container-padding-margin {
+  padding: 20px;
+  margin: 0;
+}

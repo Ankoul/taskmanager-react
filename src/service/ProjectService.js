@@ -1,32 +1,25 @@
-import projects from "./projects.json";
-import _ from "lodash";
+import Service from "./Service";
 
-class ProjectService {
+
+const URL = process.env.REACT_APP_REST_API + "/projects";
+class ProjectService extends Service {
 
     listProjects = async () => {
-        return [...projects];
+        return await super.get(URL);
     };
 
     createProject = async (project) => {
-        project = _.clone(project);
-        project.id = _.add(_.max(_.map(projects, (p) => p.id)), 1);
-        project.tasks = [];
-        projects.push(project);
-        return project;
+        return await super.post(URL, project);
     };
 
     deleteProject = async (projectId) => {
-        _.remove(projects, (project) => project.id === projectId);
+        return await super.delete(`${URL}/${projectId}`);
     };
 
     updateProject = async (project) => {
-        let p = this.findProjectById(project.id);
-        _.assign(p, project);
+        return await super.put(URL, project);
     };
 
-    findProjectById = async (id) => {
-        return _.find(projects, {id: id});
-    };
 }
 
 export default new ProjectService();

@@ -1,35 +1,20 @@
-import _ from "lodash";
-import projectService from "./ProjectService";
-import moment from "moment";
+import Service from "./Service";
 
-class TaskService {
+const URL = process.env.REACT_APP_REST_API + "/tasks";
+class TaskService extends Service {
 
-    createTask = async (task, projectId) => {
-        let project = await projectService.findProjectById(projectId);
-        task = _.clone(task);
-        task.id = _.add(_.max(_.map(project.tasks, (t) => t.id)), 1);
-        task.createDate = moment();
-        task.finishDate = null;
-        project.tasks.push(task);
-        return task;
+    createTask = async (task) => {
+        return await super.post(URL, task);
     };
 
-    deleteTask = async (taskId, projectId) => {
-        let project = await projectService.findProjectById(projectId);
-        _.remove(project.tasks, (task)=> task.id === taskId);
+    deleteTask = async (taskId) => {
+        return await super.delete(`${URL}/${taskId}`);
     };
 
-    updateTask = async (task, projectId) => {
-        let project = await projectService.findProjectById(projectId);
-        let t = _.find(project.tasks, {id: task.id});
-        _.assign(t, task);
+    updateTask = async (task) => {
+        return await super.put(URL, task);
     };
 
-    finishtask = async (task, projectId) => {
-        task.finishDate = moment();
-        await this.updateTask(task, projectId);
-
-    }
 }
 
 export default new TaskService();

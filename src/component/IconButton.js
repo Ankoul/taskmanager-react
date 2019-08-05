@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
-import Form from "react-bootstrap/Form";
 import PropTypes from "prop-types";
-import taskService from "../service/TaskService";
-import {FiTrash2} from "react-icons/fi";
-import Button from "react-bootstrap/Button";
 
 
 export default class IconButton extends Component {
